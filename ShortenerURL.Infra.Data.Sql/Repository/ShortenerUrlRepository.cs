@@ -28,10 +28,7 @@ namespace ShortenerURL.Models
             if (Store.Id ==0)
             {
                 var rnd = new Random(DateTime.Now.Second);
-
-                //var i = shortenerDbContext.UrlEntities.ToList().Max(x =>x.UrlId);
                 Store.Id = rnd.Next();
-                    //i>0 ? i : rnd.Next();
             };
             var entity = new UrlEntity
             {
