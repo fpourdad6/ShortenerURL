@@ -10,11 +10,11 @@ namespace ShortenerURL.Controllers
     [ApiController]
     public class ShortenerController : ControllerBase
     {
-        private readonly IShortenerUrl _shortenerUrlRepository;
+        private readonly IShortenerUrl _shortenerUrl;
 
-        public ShortenerController(IShortenerUrl shortenerUrlRepository)
+        public ShortenerController(IShortenerUrl shortenerUrl)
         {
-            this._shortenerUrlRepository = shortenerUrlRepository;
+            this._shortenerUrl = shortenerUrl;
         }
         [HttpPost]
         public ActionResult<BaseResponse<string>> Post(BaseRequest<string> request)
@@ -24,7 +24,7 @@ namespace ShortenerURL.Controllers
                 return BadRequest();
             }
          
-            var e = _shortenerUrlRepository.Add(inputUri.ToString());
+            var e = _shortenerUrl.Add(inputUri.ToString());
             var result = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{e.UrlKey}";
             return Ok(new BaseResponse<string> { Result = result });
         }
@@ -33,12 +33,12 @@ namespace ShortenerURL.Controllers
 
         public ActionResult<BaseResponse<string>> Get(string id)
         {
-            var res = _shortenerUrlRepository.Get(id);
+            var res = _shortenerUrl.Get(id);
             if (res != null)
             {
                 return new RedirectResult(res?.LongUrl ?? "/");
             }
-            return BadRequest(new { description = "invalid url" });
+            return BadRequest(new { description = "Invalid url" });
         }
     }
 }
